@@ -1,7 +1,7 @@
 use octocrab::models::repos::Release;
 
 pub async fn search() {
-    eprintln!("{:#?}", get_latest_version().await)
+    println!("{:#?}", get_latest_version().await)
 }
 
 async fn get_latest_version() -> Release {
