@@ -22,6 +22,7 @@ fn main() {
             let runtime = start.elapsed();
 
             if let Some(remaining) = wait_time.checked_sub(runtime) {
+                eprintln!("Last run took {:?} to run", runtime);
                 eprintln!(
                     "Waiting for {} seconds before next run",
                     remaining.as_secs()
