@@ -10,4 +10,6 @@ publish = false
 license = "AGPL-3.0-or-later"
 
 [dependencies]
-actix = "0.13.1"
+actix-web = "4.4"
+octocrab = "0.30"
+tokio = "1.32.0"
