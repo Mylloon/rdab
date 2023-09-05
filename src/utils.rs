@@ -4,14 +4,14 @@ use std::{env, path::PathBuf};
 
 /// Data directory
 pub fn get_data_directory() -> PathBuf {
-    let pwd = env::current_dir().expect("Can't find the current directory");
+    let pwd = env::current_dir().expect("Can't find the current directory.");
 
     pwd.join("data")
 }
 
 /// Download a file to data directory
 pub async fn download_file(url: String) {
-    let source = reqwest::Url::parse(&url).expect("Can't parse the URL");
+    let source = reqwest::Url::parse(&url).expect("Can't parse the URL.");
     let fname = source
         .path_segments()
         .and_then(|segments| segments.last())

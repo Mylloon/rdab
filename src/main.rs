@@ -40,7 +40,7 @@ async fn main() {
             rt.block_on(async {
                 thread_revanced
                     .join()
-                    .expect("Thread Revanced panicked")
+                    .expect("Thread Revanced panicked.")
                     .await
             });
 
@@ -61,5 +61,5 @@ async fn main() {
     init();
 
     // Run scheduler
-    scheduler.join().expect("Scheduler panicked");
+    scheduler.join().expect("Scheduler panicked.");
 }
