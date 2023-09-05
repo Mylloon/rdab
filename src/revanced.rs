@@ -54,6 +54,7 @@ pub async fn worker() {
 /// Search for the latest version
 /// Returns option if update has been found with the right URL
 async fn search(repo_type: &RevancedRepo) -> Option<String> {
+    println!("Check updates for {:?}.", repo_type);
     let github_latest_version = get_latest_version(repo_type).await;
 
     let latest_version = {
