@@ -11,7 +11,7 @@ pub fn get_data_directory() -> PathBuf {
 
 /// Download a file to data directory
 pub async fn download_file(url: String) {
-    let source = reqwest::Url::parse(&url).unwrap();
+    let source = reqwest::Url::parse(&url).expect("Can't parse the URL");
     let fname = source
         .path_segments()
         .and_then(|segments| segments.last())
@@ -24,10 +24,12 @@ pub async fn download_file(url: String) {
                 let filepath = get_data_directory().join(fname);
 
                 // Create file
-                let mut dest = File::create(filepath).unwrap();
+                let mut dest = File::create(&filepath)
+                    .unwrap_or_else(|_| panic!("Can't create the file at {}.", filepath.display()));
 
                 // Write data to the file
-                dest.write_all(&bytes).unwrap();
+                dest.write_all(&bytes)
+                    .unwrap_or_else(|_| panic!("Can't write to file at {}.", filepath.display()));
             }
             Err(..) => eprintln!("Can't download {}.", fname),
         },

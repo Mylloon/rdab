@@ -27,7 +27,7 @@ async fn main() {
             .enable_io()
             .enable_time()
             .build()
-            .unwrap();
+            .expect("Can't build tokio runtime.");
 
         loop {
             let start = Instant::now();

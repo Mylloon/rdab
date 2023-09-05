@@ -20,7 +20,7 @@ async fn search() -> Option<String> {
     let latest_version = {
         let mut tag = github_latest_version.tag_name.chars();
         tag.next();
-        Version::parse(tag.as_str()).unwrap()
+        Version::parse(tag.as_str()).expect("Can't parse the latest version")
     };
 
     if let Some(current_version) = get_current_version() {
@@ -41,7 +41,10 @@ async fn search() -> Option<String> {
             format!(
                 "{}://{}{}",
                 asset.browser_download_url.scheme(),
-                asset.browser_download_url.host().unwrap(),
+                asset
+                    .browser_download_url
+                    .host()
+                    .expect("Can't get asset host"),
                 asset.browser_download_url.path()
             )
         })
@@ -68,9 +71,19 @@ fn get_current_version() -> Option<semver::Version> {
         }
         Ok(paths) => {
             for path in paths {
-                let re = Regex::new(r"revanced-patches-(?P<version>\d+\.\d+\.\d+)\.jar").unwrap();
-                if let Some(caps) = re.captures(&path.unwrap().path().display().to_string()) {
-                    return Some(Version::parse(&caps["version"]).unwrap());
+                let re = Regex::new(r"revanced-patches-(?P<version>\d+\.\d+\.\d+)\.jar")
+                    .expect("Can't build regex formula for revanced patches.");
+                if let Some(caps) = re.captures(
+                    &path
+                        .expect("Can't match patterns for revanced patches")
+                        .path()
+                        .display()
+                        .to_string(),
+                ) {
+                    return Some(
+                        Version::parse(&caps["version"])
+                            .expect("No version found in the asset of revanced patches"),
+                    );
                 }
             }
             None
