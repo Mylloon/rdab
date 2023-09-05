@@ -6,9 +6,9 @@ use std::fs;
 
 /// Revanced worker
 pub async fn worker() {
+    // Download patches if needed
     if let Some(patches_url) = search().await {
-        // Download
-        println!("TODO // Download {}", patches_url);
+        utils::download_file(patches_url).await;
     }
 }
 
