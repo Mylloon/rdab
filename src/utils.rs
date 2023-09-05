@@ -18,6 +18,7 @@ pub async fn download_file(url: String) {
         .and_then(|name| if name.is_empty() { None } else { Some(name) })
         .expect("Can't find the filename of URL.");
 
+    println!("Downloading {}.", fname);
     match reqwest::get(source.clone()).await {
         Ok(data) => match data.bytes().await {
             Ok(bytes) => {
@@ -30,6 +31,8 @@ pub async fn download_file(url: String) {
                 // Write data to the file
                 dest.write_all(&bytes)
                     .unwrap_or_else(|_| panic!("Can't write to file at {}.", filepath.display()));
+
+                println!("File downloaded ({}).", fname);
             }
             Err(..) => eprintln!("Can't download {}.", fname),
         },
