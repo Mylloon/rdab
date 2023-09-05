@@ -36,7 +36,8 @@ async fn main() {
             println!("Scheduler starting");
 
             /* TODO: Is it okay to run everything in threads ???
-             * Build depends on APK and ReVanced threads to be completed */
+             * We are .join() but since I never used it we need some extensive testing
+             * !! Build depends on APK and ReVanced threads to be completed */
 
             // Prepare threads
             let thread_revanced = thread::spawn(revanced::worker);
