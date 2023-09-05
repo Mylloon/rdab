@@ -1,9 +1,21 @@
 use std::{
-    thread,
+    fs, thread,
     time::{Duration, Instant},
 };
 
 mod revanced;
+mod utils;
+
+/// Initialize
+pub fn init() {
+    // Make data directory
+    if let Err(why) = fs::create_dir(utils::get_data_directory()) {
+        match why.kind() {
+            std::io::ErrorKind::AlreadyExists => (),
+            _ => eprintln!("{:?}", why.kind()),
+        }
+    }
+}
 
 #[actix_web::main]
 async fn main() {
@@ -22,10 +34,15 @@ async fn main() {
             println!("Scheduler starting");
 
             // Prepare threads
-            let thread_a = thread::spawn(revanced::search);
+            let thread_revanced = thread::spawn(revanced::worker);
 
             // Run threads
-            rt.block_on(async { thread_a.join().expect("Thread A panicked").await });
+            rt.block_on(async {
+                thread_revanced
+                    .join()
+                    .expect("Thread Revanced panicked")
+                    .await
+            });
 
             let runtime = start.elapsed();
 
@@ -39,6 +56,9 @@ async fn main() {
             }
         }
     });
+
+    // Initializations
+    init();
 
     // Run scheduler
     scheduler.join().expect("Scheduler panicked");
