@@ -3,6 +3,8 @@ use std::{
     time::{Duration, Instant},
 };
 
+mod apk;
+mod build;
 mod revanced;
 mod utils;
 
@@ -33,8 +35,13 @@ async fn main() {
             let start = Instant::now();
             println!("Scheduler starting");
 
+            /* TODO: Is it okay to run everything in threads ???
+             * Build depends on APK and ReVanced threads to be completed */
+
             // Prepare threads
             let thread_revanced = thread::spawn(revanced::worker);
+            let thread_apk = thread::spawn(apk::worker);
+            let thread_build = thread::spawn(build::worker);
 
             // Run threads
             rt.block_on(async {
@@ -43,6 +50,8 @@ async fn main() {
                     .expect("Thread Revanced panicked.")
                     .await
             });
+            thread_apk.join().expect("Thread APK panicked.");
+            thread_build.join().expect("Thread Build panicked.");
 
             let runtime = start.elapsed();
 
